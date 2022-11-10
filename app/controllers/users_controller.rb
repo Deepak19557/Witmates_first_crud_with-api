@@ -8,29 +8,25 @@ class UsersController < ApplicationController
 
 	def create
 		@user = User.create(user_params)
-		render json: @user  
-	end
-
-	def edit
-		@user = User.find(params[:id])
+		render json: UserSerializer.new(@user).serializable_hash    
 	end
 
 	def update
 		@user = User.find(params[:id])
-		@user.update(user_params)
-		render json: @user
+		@user.update(user_params)     
+		render json: UserSerializer.new(@user).serializable_hash    
 	end
 
 	def destroy
 		@user = User.find(params[:id])
 		@user.destroy
-		render json:  {status: "deleted"}
+		render json: UserSerializer.new(@user).serializable_hash    
 	end
 
 
 	private
 
 	def user_params
-		params.permit(:id, :first_name, :last_name, :number)
+		params.require(:user).permit(:id, :first_name, :last_name, :number)
 	end
 end
